@@ -42,3 +42,7 @@ To run in development mode make sure to `$ source dev_env_vars` before running t
 Make sure the virtual env is activated.
 
 `python -m yoso.server`
+
+
+# Why yoso?
+it's a pun on the YOLO model (you only look once), for "you only serve once"
