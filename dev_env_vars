@@ -1,0 +1,5 @@
+# source this file befor development starup
+export YOSO_port=8001
+export YOSO_dev_mode=TRUE
+export YOSO_upload_dir=/tmp/yoso_image_upload_DEV
+export YOSO_title="(Dev) Deployment of a ML Model with FastAPI"
