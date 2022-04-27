@@ -1,0 +1,9 @@
+* Objectives
+  - use a pretrained cv model for object detection
+  - expose the service as FastAPI prediction server
+  - explore prediction service fundamentals
+  - provide an example client that consumes the service
+
+* Extras
+  - Monitoring the service
+  - explore deployment solutions
