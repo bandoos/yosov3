@@ -46,3 +46,11 @@ Make sure the virtual env is activated.
 
 # Why yoso?
 it's a pun on the YOLO model (you only look once), for "you only serve once"
+
+
+# Client
+
+The yosoclient also shows a simple approach to consume the API from python.
+A simple CLI application using `click` shows how the client wrapper can be used.
+
+see help via `$ python -m yosoclient.cli --help`.
