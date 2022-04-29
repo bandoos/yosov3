@@ -27,8 +27,10 @@ from enum import Enum
 from pprint import pprint
 
 ## Fastapi imports
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.responses import StreamingResponse, HTMLResponse, JSONResponse
+## Tracing
+from opentelemetry import trace
 
 ## Internal package imports
 from yoso.console import console
@@ -60,6 +62,13 @@ Now head over to <a href='http://{config.host}:{config.port}/docs'> docs </a>.
 """
 
 
+class TracingDeps:
+    "Injectable dependency for fine-grained tracing"
+
+    def __init__(self):
+        self.tracer = trace.get_tracer(config.service_name)
+
+
 ## Define routes
 @app.get("/")
 def home():
@@ -68,10 +77,11 @@ def home():
 
 # This endpoint handles all the logic necessary for the object detection to work.
 # It requires the desired model and the image in which to perform object detection.
-@app.post("/predict")
+@app.post("/predict", summary="Perform object detection.")
 def prediction(model: Model,
                confidence: float = 0.5,
-               file: UploadFile = File(...)):
+               file: UploadFile = File(...),
+               tracing: TracingDeps = Depends(TracingDeps)):
 
     # 1. VALIDATE INPUT FILE
     utils.validate_image_file(file)
@@ -80,11 +90,13 @@ def prediction(model: Model,
     image = file_to_cv_image(file)
 
     # 3. RUN OBJECT DETECTION MODEL
-    bbox, label, conf = cv.detect_common_objects(
-        image,
-        model=model,
-        # extra, pass the confidence level
-        confidence=confidence)
+
+    with tracing.tracer.start_as_current_span("cv-model"):
+        bbox, label, conf = cv.detect_common_objects(
+            image,
+            model=model,
+            # extra, pass the confidence level
+            confidence=confidence)
 
     # Create image that includes bounding boxes and labels
     output_image = draw_bbox(image, bbox, label, conf, write_conf=True)
@@ -105,19 +117,21 @@ def prediction(model: Model,
 @app.post("/count_objects", response_model=CounterResponse)
 def count_objects(model: Model,
                   confidence: float = 0.5,
-                  file: UploadFile = File(...)):
+                  file: UploadFile = File(...),
+                  tracing: TracingDeps = Depends(TracingDeps)):
     # 1. VALIDATE INPUT FILE
     utils.validate_image_file(file)
 
     # 2. TRANSFORM RAW IMAGE INTO CV2 image
     image = file_to_cv_image(file)
 
-    # 3. RUN OBJECT DETECTION MODEL
-    _, label, _ = cv.detect_common_objects(
-        image,
-        model=model,
-        # extra, pass the confidence level
-        confidence=confidence)
+    with tracing.tracer.start_as_current_span("cv-model"):
+        # 3. RUN OBJECT DETECTION MODEL
+        _, label, _ = cv.detect_common_objects(
+            image,
+            model=model,
+            # extra, pass the confidence level
+            confidence=confidence)
 
     c = Counter(label)
 

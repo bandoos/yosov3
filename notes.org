@@ -6,4 +6,11 @@
 
 * Extras
   - Monitoring the service
+    - opentelemetry + zipkin
+  - make the choice of exporter configurable
+    - understand how to add custom spans
+    - with attributes?
+  - dependency injection in handlers
+
+* Todo
   - explore deployment solutions
