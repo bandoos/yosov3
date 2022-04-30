@@ -56,6 +56,11 @@ pprint(config.dict())
 # instatiate fastapi app
 app = FastAPI(title=config.title)
 
+# Optionally configure prometheus metrics route
+if config.prometheus_metrics:
+    from yoso.prometheus import add_metrics
+    add_metrics(app)
+
 welcome_page = f"""
 Congratulations! Your API is working as expected.<br/>
 Now head over to <a href='http://{config.host}:{config.port}/docs'> docs </a>.

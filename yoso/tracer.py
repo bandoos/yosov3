@@ -38,6 +38,7 @@ class ConsoleInstrumentationManager(BaseIntrumentationManager):
         super().__init__(service_name)
         self.exporter = ConsoleSpanExporter()
         self.processor = SimpleSpanProcessor(self.exporter)
+        self.configure()
 
 
 class ZipkinInstrumentationManager(BaseIntrumentationManager):
@@ -54,6 +55,7 @@ class ZipkinInstrumentationManager(BaseIntrumentationManager):
         self.config = ZipkinExporterConfig()
         self.exporter = ZipkinExporter(endpoint=self.config.endpoint)
         self.processor = BatchSpanProcessor(self.exporter)
+        self.configure()
 
 
 options = {

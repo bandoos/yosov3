@@ -29,6 +29,28 @@ see the *yoso.config* module.
 
 The default configuration values serves on port 8000 from all interfaces.
 To run in development mode make sure to `$ source dev_env_vars` before running the server.
+dev mode will turn on hot reload.
+
+### Monitoring instrumentation
+The prediction server can optionally be monitored via OpenTelemetry
+instrumentation.  Instrumentation is available outside of dev_mode,
+and is turned on by setting `YOSO_otel_instrument=TRUE`.
+
+By default monitoring exports spans to the console. This is useful to
+check everything is working but is undesirable in general. A more
+useful setup is using a span collector like `zipkin`.
+
+To enable zipkin monitoring set `YOSO_otel_instrument_exporter=zipkin`
+and `YOSO_ZIPKIN_endpoint=http://<zipkin-host>:<zipkin-port>/api/v2/spans`.
+
+A plug and play zipkin instance can be run via docker with:
+`$ docker run --rm -d -p 9411:9411 --name zipkin openzipkin/zipkin`
+
+
+
+
+
+
 
 
 ## Installation

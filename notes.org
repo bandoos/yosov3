@@ -7,6 +7,8 @@
 * Extras
   - Monitoring the service
     - opentelemetry + zipkin
+    - prometheus for numeric metrics
+
   - make the choice of exporter configurable
     - understand how to add custom spans
     - with attributes?
@@ -14,3 +16,4 @@
 
 * Todo
   - explore deployment solutions
+  - exclude /metrics endpoint from OpenTelemetry
