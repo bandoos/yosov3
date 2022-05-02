@@ -31,7 +31,9 @@ The default configuration values serves on port 8000 from all interfaces.
 To run in development mode make sure to `$ source dev_env_vars` before running the server.
 dev mode will turn on hot reload.
 
-### Monitoring instrumentation
+### Monitoring/instrumentation
+
+#### tracing with OpenTelemetry + zipkin
 The prediction server can optionally be monitored via OpenTelemetry
 instrumentation.  Instrumentation is available outside of dev_mode,
 and is turned on by setting `YOSO_otel_instrument=TRUE`.
@@ -46,11 +48,18 @@ and `YOSO_ZIPKIN_endpoint=http://<zipkin-host>:<zipkin-port>/api/v2/spans`.
 A plug and play zipkin instance can be run via docker with:
 `$ docker run --rm -d -p 9411:9411 --name zipkin openzipkin/zipkin`
 
+#### Metrics with Prometheus and Grafana
+`YOSO_prometheus_metrics` controls weather the FastAPI app should also be instrumented
+to export prometheus compatible metrics (via `/metrics` endpoint).
+This is enabled by default as since prometheus will scrape the `/metrics` endpoint
+rather than the service pushing metrics, it does not require prometheus to be running.
 
+To start prometheus the `prometheus/launch.sh` script will spin up a docker container for it.
+Note that the prometheus instance will be configured according to `prometheus/conf_dir/prometheus.yml`,
+so make sure to change config endpoints if deploying in a different way.
 
-
-
-
+To start grafana server use `grafana/launch.sh` and configure from the web ui.
+An example dashboard JSON model can be found in `grafana/boards/example.json`
 
 
 ## Installation
