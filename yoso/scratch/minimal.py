@@ -3,6 +3,8 @@ import os
 import io
 import numpy as np
 import cv2
+import cvlib as cv
+from cvlib.object_detection import draw_bbox
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, StreamingResponse
 import uvicorn
@@ -62,9 +64,6 @@ def prediction(model: Model,
                confidence: float = 0.5,
                file: UploadFile = File(...)):
 
-    import cvlib as cv
-    from cvlib.object_detection import draw_bbox
-
     validate_image_file(file)
     image = file_to_cv_image(file)
 
@@ -90,23 +89,6 @@ def prediction(model: Model,
 
     # Return the image as a stream specifying media type
     return StreamingResponse(file_image, media_type="image/jpeg")
-
-
-# This endpoint handles all the logic necessary for the object detection to work.
-# It requires the desired model and the image in which to perform object detection.
-@app.post("/sizeof", summary="Perform object detection.")
-def sizeof(file: UploadFile = File(...)):
-
-    import cvlib as cv
-    from cvlib.object_detection import draw_bbox
-
-    validate_image_file(file)
-    image = file_to_cv_image(file)
-
-    Height, Width = image.shape[:2]
-    print("->", Height, Width)
-
-    return {"h": Height, "w": Width}
 
 
 if __name__ == "__main__":

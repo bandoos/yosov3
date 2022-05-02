@@ -76,3 +76,12 @@ The yosoclient also shows a simple approach to consume the API from python.
 A simple CLI application using `click` shows how the client wrapper can be used.
 
 see help via `$ python -m yosoclient.cli --help`.
+
+
+# CVLIB race condition
+
+while testing the server under high load via `locust` i found what is probably a race
+condition in `cvlib.detect_common_objects`.
+
+I hence copied and refactored their code into `yoso.model.my_model` such that a DetectionModel
+class is available that with a threading lock guarding the `detect_common_objects` method.
