@@ -21,7 +21,6 @@ import os
 from collections import Counter
 import cv2
 import cvlib as cv
-from cvlib.object_detection import draw_bbox
 # import nest_asyncio # for usage in jupyter
 from enum import Enum
 from pprint import pprint
@@ -37,6 +36,7 @@ from yoso.console import console
 import yoso.utils as utils
 from yoso.cvutils import file_to_cv_image
 from yoso.config import ServerConfig
+from yoso.model import DetectionModel
 # Api models
 from yoso.api_models import CounterResponse
 
@@ -55,6 +55,9 @@ pprint(config.dict())
 
 # instatiate fastapi app
 app = FastAPI(title=config.title)
+
+# build detection model
+od_model = DetectionModel()
 
 # Optionally configure prometheus metrics route
 if config.prometheus_metrics:
@@ -97,14 +100,18 @@ def prediction(model: Model,
     # 3. RUN OBJECT DETECTION MODEL
 
     with tracing.tracer.start_as_current_span("cv-model"):
-        bbox, label, conf = cv.detect_common_objects(
+        bbox, label, conf = od_model.detect_common_objects(
             image,
             model=model,
             # extra, pass the confidence level
             confidence=confidence)
 
     # Create image that includes bounding boxes and labels
-    output_image = draw_bbox(image, bbox, label, conf, write_conf=True)
+    output_image = od_model.draw_bbox(image,
+                                      bbox,
+                                      label,
+                                      conf,
+                                      write_conf=True)
 
     img_path = os.path.join(config.upload_dir, file.filename)
     # Save it in a folder within the server
@@ -132,7 +139,7 @@ def count_objects(model: Model,
 
     with tracing.tracer.start_as_current_span("cv-model"):
         # 3. RUN OBJECT DETECTION MODEL
-        _, label, _ = cv.detect_common_objects(
+        _, label, _ = od_model.detect_common_objects(
             image,
             model=model,
             # extra, pass the confidence level

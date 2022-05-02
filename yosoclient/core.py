@@ -91,6 +91,8 @@ class Client:
             else:
                 self.request_error(resp.url, resp.status_code)
 
+            return resp
+
     def count_objects_request(self, image_path: str, confidence=0.5):
         """
         Make a /count_objects request to the server and return the json decoded response.
