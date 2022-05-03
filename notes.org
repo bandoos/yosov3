@@ -13,7 +13,11 @@
     - understand how to add custom spans
     - with attributes?
   - dependency injection in handlers
+  - exclude /metrics endpoint from OpenTelemetry
+  - docker compose full stack
 
 * Todo
   - explore deployment solutions
-  - exclude /metrics endpoint from OpenTelemetry
+  - custom prometheus metrics
+    - e.g. number of null predictions
+    - or other domain specific metrics
