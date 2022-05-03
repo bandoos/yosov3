@@ -36,7 +36,7 @@ from yoso.console import console
 import yoso.utils as utils
 from yoso.cvutils import file_to_cv_image
 from yoso.config import ServerConfig
-from yoso.model import DetectionModel
+from yoso.model.my_model import DetectionModel
 # Api models
 from yoso.api_models import CounterResponse
 

@@ -94,3 +94,14 @@ condition in `cvlib.detect_common_objects`.
 
 I hence copied and refactored their code into `yoso.model.my_model` such that a DetectionModel
 class is available that with a threading lock guarding the `detect_common_objects` method.
+
+
+# Docker Compose full stack
+
+An example running the full python+prometheus+grafana+zipkin stack can be found in `compose/stage`
+run it via `docker-compose up`
+
+- server: http://localhost:8000/docs
+- zipkin: http://localhost:9411
+- prometheus: http://localhost:9090
+- grafana: http://localhost:3000

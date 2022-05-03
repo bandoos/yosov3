@@ -1,0 +1,30 @@
+services:
+  yoso-server:
+    image: yoso-server:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - yoso.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    mem_limit: 4g
+    environment:
+      - MEM_MAX_SPANS=1000
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prom_conf_dir:/etc/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
