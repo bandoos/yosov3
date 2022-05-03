@@ -95,6 +95,8 @@ condition in `cvlib.detect_common_objects`.
 I hence copied and refactored their code into `yoso.model.my_model` such that a DetectionModel
 class is available that with a threading lock guarding the `detect_common_objects` method.
 
+# Build docker image for the prediction server
+`$ docker build -t yoso-server .`
 
 # Docker Compose full stack
 
