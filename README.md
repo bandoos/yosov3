@@ -21,6 +21,18 @@ for development mode (i.e. with autoreload):
 This software is adapted from coursera `introduction-to-machine-learning-in-production`
 ungraded lab week 1.
 
+# Minimal code
+Under `yoso/scratch/minimal.py` the basic idea (with no additional
+featrues) is implemented.
+
+Under `yoso/scratch/minimal_my_model.py` a
+version using `yoso/model/my_model.py` providing thread safety
+
+# Full code
+- `yoso.core` FastAPI application definition
+- `yoso.server` Server wrapper class handling setup and handler resolution
+
+
 
 ## Server configuration
 
